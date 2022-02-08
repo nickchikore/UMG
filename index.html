@@ -70,13 +70,29 @@
       </div>
     </section>
 
-    <a href="#" id="load">Show contents</a>
+    <a href="#" id="loadData">Show contents</a>
     <div id="content"></div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
       $(document).ready(function () {
-        console.log("working");
+        $("#loadData").click(function () {
+          searchLastFM();
+        });
       });
+      function searchLastFM() {
+        $.ajax({
+          url: "http://ws.audioscrobbler.com/2.0/",
+          type: "GET",
+          data: {
+            method: "artist.search",
+            artist: "Jay-Z",
+            api_key: "71499159fe5e641e3445d4cb412a7d5a",
+            format: "json",
+          },
+        }).done(function (data) {
+          console.log(data);
+        });
+      }
     </script>
   </body>
 </html>
