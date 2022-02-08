@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <header>
+      <h1>Joe Artist</h1>
+    </header>
+    <!--A promotional banner advertising a new single -->
+    <section class="container banner-promo">
+      <h2>Joe Artist - <span>New Job</span></h2>
+      <p>Available on streaming platforms from 14/02/2022</p>
+      <div class="search">
+        <h3>Explore Joe's world!</h3>
+
+        <form action="">
+          <input type="text" />
+        </form>
+      </div>
+    </section>
+    <section class="container">
+      <!-- A “Music” section (not required to have working audio playback). Can display anything music-related using either of the following APIs (feel free to query any UMG artist) -->
+      <!-- Include pagination or infinite scroll in one of the sections. -->
+      <div class="container featured-music">
+        <audio controls>
+          <!-- <source src="" type="audio/ogg" />
+          <source src="" type="audio/mpeg" /> -->
+          Your browser does not support the audio element.
+        </audio>
+        <ul class="featured-music">
+          <li><a href="#" data-song="song1">Song1</a></li>
+          <li><a href="#" data-song="song2">Song2</a></li>
+          <li><a href="#" data-song="song3">Song3</a></li>
+        </ul>
+        {{infinite scroll here}}
+      </div>
+      <div class="container featured-merchandise">
+        <!-- A “Merch” section showcasing 1-4 products (can use dummy/static data) -->
+        <!-- Include an option to filter the product for one of the sections (this option should use a React hook to conditionally call one of the suggested API endpoints). -->
+        <ul class="merchandise">
+          <li><a href="#" data-shop-item="shop-item1">Shop-item1</a></li>
+          <li><a href="#" data-shop-item="shop-item2">Shop-item2</a></li>
+          <li><a href="#" data-shop-item="shop-item3">Shop-item3</a></li>
+        </ul>
+        {{pagination here}}
+      </div>
+      <div class="container featured-videos">
+        <!-- A “Video” section that displays the Top 3 Youtube videos by views -->
+        <!-- Please include one visualization/graph using any of the API’s previously mentioned -->
+        <video width="320" height="240" controls>
+          <!-- <source src="" type="video/mp4" />
+          <source src="" type="video/ogg" /> -->
+          Your browser does not support the video tag.
+        </video>
+        <ul class="videos">
+          <li>
+            <a href="#" data-video="video1"><img src="#" alt="" />video1</a>
+          </li>
+          <li>
+            <a href="#" data-video="video2"><img src="#" alt="" />video2</a>
+          </li>
+          <li>
+            <a href="#" data-video="video3"><img src="#" alt="" />video3</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <a href="#" id="load">Show contents</a>
+    <div id="content"></div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        console.log("working");
+      });
+    </script>
+  </body>
+</html>
