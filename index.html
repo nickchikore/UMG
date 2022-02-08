@@ -16,15 +16,12 @@
       <p>Available on streaming platforms from 14/02/2022</p>
       <div class="search">
         <h3>Explore Joe's world!</h3>
-
-        <form action="">
-          <input type="text" />
-        </form>
       </div>
     </section>
     <section class="container">
       <!-- A “Music” section (not required to have working audio playback). Can display anything music-related using either of the following APIs (feel free to query any UMG artist) -->
       <!-- Include pagination or infinite scroll in one of the sections. -->
+      <!-- Please include one visualization/graph using any of the API’s previously mentioned -->
       <div class="container featured-music">
         <audio controls>
           <!-- <source src="" type="audio/ogg" />
@@ -48,12 +45,14 @@
         </ul>
         {{pagination here}}
       </div>
+      <div class="container featured">
+        <div class="most-popular"></div>
+      </div>
       <div class="container featured-videos">
         <!-- A “Video” section that displays the Top 3 Youtube videos by views -->
-        <!-- Please include one visualization/graph using any of the API’s previously mentioned -->
         <video width="320" height="240" controls>
           <!-- <source src="" type="video/mp4" />
-          <source src="" type="video/ogg" /> -->
+            <source src="" type="video/ogg" /> -->
           Your browser does not support the video tag.
         </video>
         <ul class="videos">
@@ -90,15 +89,34 @@
             limit: 25,
             autocorrect: 1,
           },
-        }).done(function (data) {
-          let d = data.toptracks;
-          var html = "";
-          console.log(d);
-          $.each(d["track"], function (index, value) {
+        }).done(function (music) {
+          let items = music.toptracks;
+          let featuredMusic = "";
+          let featuredVideos = "";
+          let featuredMerchandise = "";
+          console.log(items);
+          $.each(items["track"], function (index, value) {
+            featuredMusic += `
+              
+            <ul class="featured-music">
+            <li><a href="${value.url}" data-song="song1" target="blank">${value.name}</a>
+            <audio controls>
+            <!-- <source src="" type="audio/ogg" />
+            <source src="" type="audio/mpeg" /> -->
+            Your browser does not support the audio element.
+            </audio>
+            <span>${value.listeners} ${value.playcount}</span></li>
+            </ul>
+              `;
+
             console.log(value.name);
             console.log(value.url);
+            console.log(`${value.listeners} ${value.playcount}`);
           });
-          $("#output").html(html);
+
+          $(".featured-music").html(featuredMusic);
+          //$(".featured-merchandise").html(featuredMerchandise);
+          //$(".featured-videos").html(featuredVideos);
         });
       }
     </script>
