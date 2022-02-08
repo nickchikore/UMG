@@ -75,22 +75,30 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
       $(document).ready(function () {
-        $("#loadData").click(function () {
-          searchLastFM();
-        });
+        $("#loadData").click(function () {});
+        searchLastFM();
       });
       function searchLastFM() {
         $.ajax({
           url: "http://ws.audioscrobbler.com/2.0/",
           type: "GET",
           data: {
-            method: "artist.search",
+            method: "artist.getTopTracks",
             artist: "Jay-Z",
             api_key: "71499159fe5e641e3445d4cb412a7d5a",
             format: "json",
+            limit: 25,
+            autocorrect: 1,
           },
         }).done(function (data) {
-          console.log(data);
+          let d = data.toptracks;
+          var html = "";
+          console.log(d);
+          $.each(d["track"], function (index, value) {
+            console.log(value.name);
+            console.log(value.url);
+          });
+          $("#output").html(html);
         });
       }
     </script>
