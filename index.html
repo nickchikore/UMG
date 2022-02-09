@@ -7,15 +7,11 @@
     <title>Document</title>
   </head>
   <body>
-    <header>
-      <h1>Joe Artist</h1>
-    </header>
+    <header></header>
     <!--A promotional banner advertising a new single -->
-    <section class="container banner-promo">
-      <h2>Joe Artist - <span>New Job</span></h2>
-      <p>Available on streaming platforms from 14/02/2022</p>
-      <div class="search">
-        <h3>Explore Joe's world!</h3>
+    <section class="container banner-promo" id="hero">
+      <div class="summary" id="container">
+        <p></p>
       </div>
     </section>
     <section class="container">
@@ -28,14 +24,14 @@
           <source src="" type="audio/mpeg" /> -->
           Your browser does not support the audio element.
         </audio>
-        <ul class="featured-music">
+        <ul class="featured-music" id="music">
           <li><a href="#" data-song="song1">Song1</a></li>
           <li><a href="#" data-song="song2">Song2</a></li>
           <li><a href="#" data-song="song3">Song3</a></li>
         </ul>
         {{infinite scroll here}}
       </div>
-      <div class="container featured-merchandise">
+      <div class="container featured-merchandise" id="shop">
         <!-- A “Merch” section showcasing 1-4 products (can use dummy/static data) -->
         <!-- Include an option to filter the product for one of the sections (this option should use a React hook to conditionally call one of the suggested API endpoints). -->
         <ul class="merchandise">
@@ -45,10 +41,11 @@
         </ul>
         {{pagination here}}
       </div>
-      <div class="container featured">
-        <div class="most-popular"></div>
-      </div>
-      <div class="container featured-videos">
+
+      <div class="container featured-videos" id="videos">
+        <div class="container featured">
+          <div class="most-popular"></div>
+        </div>
         <!-- A “Video” section that displays the Top 3 Youtube videos by views -->
         <video width="320" height="240" controls>
           <!-- <source src="" type="video/mp4" />
@@ -78,45 +75,87 @@
         searchLastFM();
       });
       function searchLastFM() {
-        $.ajax({
-          url: "http://ws.audioscrobbler.com/2.0/",
-          type: "GET",
-          data: {
-            method: "artist.getTopTracks",
-            artist: "Jay-Z",
-            api_key: "71499159fe5e641e3445d4cb412a7d5a",
-            format: "json",
-            limit: 25,
-            autocorrect: 1,
-          },
-        }).done(function (music) {
-          let items = music.toptracks;
-          let featuredMusic = "";
-          let featuredVideos = "";
-          let featuredMerchandise = "";
-          console.log(items);
-          $.each(items["track"], function (index, value) {
-            featuredMusic += `
-              
-            <ul class="featured-music">
-            <li><a href="${value.url}" data-song="song1" target="blank">${value.name}</a>
-            <audio controls>
-            <!-- <source src="" type="audio/ogg" />
-            <source src="" type="audio/mpeg" /> -->
-            Your browser does not support the audio element.
-            </audio>
-            <span>${value.listeners} ${value.playcount}</span></li>
-            </ul>
+        $.when(
+          $.ajax({
+            url: "http://ws.audioscrobbler.com/2.0/",
+            type: "GET",
+            data: {
+              method: "artist.getInfo",
+              artist: "Jay-Z",
+              api_key: "71499159fe5e641e3445d4cb412a7d5a",
+              format: "json",
+            },
+          }).done(function (artist) {
+            let header = "";
+            let tags = artist.artist.tags.tag;
+            let tagOutPut = "";
+            if (tags.length > 1) {
+              tags.splice(-1);
+              for (i = 0; i < tags.length; i++) {
+                console.log(tags[i].name);
+                tagOutPut += `
+              <span class="tag">${tags[i].name}</span>
               `;
+              }
+            } //get tags from bio to show genres for searching and filtering
+            header += `
+              <h1>${artist.artist.name}</h1>
+              `;
+            //header section with artist brand info
+            $("header").html(`${header} ${tagOutPut}`);
+          })
+        ).then(function () {
+          $.ajax({
+            url: "http://ws.audioscrobbler.com/2.0/",
+            type: "GET",
+            data: {
+              method: "artist.getTopTracks",
+              artist: "Jay-Z",
+              api_key: "71499159fe5e641e3445d4cb412a7d5a",
+              format: "json",
+              limit: 25,
+              autocorrect: 1,
+            },
+          }).done(function (music) {
+            let items = music.toptracks;
+            let featuredMusic = "";
+            let featuredVideos = "";
+            let featuredMerchandise = "";
+            let hero = `
+                <p>
+                    New single available on streaming platforms </p>
+                    <h3><a href="#" target="blank">${items.track[1].name}</a></h3>
+                    <div class="stats">
+                        <span> ${items.track[1].playcount} streams since release</span>
+                        <span> ${items.track[1].listeners} listeners</span>
+                    </div>
 
-            console.log(value.name);
-            console.log(value.url);
-            console.log(`${value.listeners} ${value.playcount}`);
+              `;
+            $.each(items["track"], function (index, value) {
+              featuredMusic += `
+                <ul class="featured-music">
+                    <li>
+                        <a href="${value.url}" data-song="song1" target="blank">
+                        <img src="${value.image[0]["#text"]}" alt="${value.name}">
+                        ${value.name}
+                        </a>
+
+                        <span>${value.playcount}</span>
+                    </li>
+                </ul>
+              `;
+            });
+            //Banner section for new release
+            $("#hero").html(hero);
+            //music section html
+            $("#music").html(
+              `<h3 class="heading">More music by ${items.track[0].artist.name}</h3> 
+                 ${featuredMusic}`
+            );
+            console.log(items); //tracks for infinite scroll or pagination
+            //$("#shop").html(featuredMerchandise);
+            //$("#videos").html(featuredVideos);
           });
-
-          $(".featured-music").html(featuredMusic);
-          //$(".featured-merchandise").html(featuredMerchandise);
-          //$(".featured-videos").html(featuredVideos);
         });
       }
     </script>
