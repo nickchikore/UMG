@@ -9,28 +9,12 @@
   <body>
     <header></header>
     <!--A promotional banner advertising a new single -->
-    <section class="container banner-promo" id="hero">
-      <div class="summary" id="container">
-        <p></p>
-      </div>
-    </section>
+    <section class="container banner-promo" id="hero"></section>
     <section class="container">
       <!-- A “Music” section (not required to have working audio playback). Can display anything music-related using either of the following APIs (feel free to query any UMG artist) -->
       <!-- Include pagination or infinite scroll in one of the sections. -->
       <!-- Please include one visualization/graph using any of the API’s previously mentioned -->
-      <div class="container featured-music">
-        <audio controls>
-          <!-- <source src="" type="audio/ogg" />
-          <source src="" type="audio/mpeg" /> -->
-          Your browser does not support the audio element.
-        </audio>
-        <ul class="featured-music" id="music">
-          <li><a href="#" data-song="song1">Song1</a></li>
-          <li><a href="#" data-song="song2">Song2</a></li>
-          <li><a href="#" data-song="song3">Song3</a></li>
-        </ul>
-        {{infinite scroll here}}
-      </div>
+      <div class="container featured-music" id="music"></div>
       <div class="container featured-merchandise" id="shop">
         <!-- A “Merch” section showcasing 1-4 products (can use dummy/static data) -->
         <!-- Include an option to filter the product for one of the sections (this option should use a React hook to conditionally call one of the suggested API endpoints). -->
@@ -103,7 +87,6 @@
             if (tags.length > 1) {
               tags.splice(-1);
               for (i = 0; i < tags.length; i++) {
-                console.log(tags[i].name);
                 tagOutPut += `
               <span class="tag">${tags[i].name}</span>
               `;
@@ -161,6 +144,11 @@
               //music section html
               $("#music").html(
                 `<h3 class="heading">More music by ${items.track[0].artist.name}</h3> 
+                <audio controls>
+                    <source src="" type="audio/ogg" />
+                    <source src="" type="audio/mpeg" /> 
+                    Your browser does not support the audio element.
+                </audio>
                  ${featuredMusic}`
               );
               console.log(items); //tracks for infinite scroll or pagination
@@ -173,7 +161,7 @@
               dataType: "json",
               type: "GET",
               data: {
-                key: "AIzaSyAiFU1MmoeGYxFOPNnEi56mqNNOlr3zFgo",
+                key: "AIzaSyCSpcBdTY7inkvTWLXJeAnP_7PM4-OPNYM",
                 q: "Jay-Z",
                 part: "snippet",
                 maxResults: 15,
