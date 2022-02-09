@@ -34,10 +34,25 @@
       <div class="container featured-merchandise" id="shop">
         <!-- A “Merch” section showcasing 1-4 products (can use dummy/static data) -->
         <!-- Include an option to filter the product for one of the sections (this option should use a React hook to conditionally call one of the suggested API endpoints). -->
+        <h2>Buy Jay-Z offical merchandise!</h2>
         <ul class="merchandise">
-          <li><a href="#" data-shop-item="shop-item1">Shop-item1</a></li>
-          <li><a href="#" data-shop-item="shop-item2">Shop-item2</a></li>
-          <li><a href="#" data-shop-item="shop-item3">Shop-item3</a></li>
+          <li>
+            <a href="#" data-shop-item="shop-item1">
+              <img src="/img/white-t.jpeg" alt="" />
+              Jay-Z classic white t-shirt</a
+            >
+            <p>£89.00</p>
+            <button type="button" class="btn">Add to basket</button>
+          </li>
+          <li>
+            <a href="#" data-shop-item="shop-item2">
+              <img src="/img/black-t.jpeg" alt="" />
+              Jay-Z retro black t-shirt</a
+            >
+            <p><span class="" reduced>£125</span>£64.00</p>
+
+            <button type="button" class="btn">Add to basket</button>
+          </li>
         </ul>
         {{pagination here}}
       </div>
@@ -65,13 +80,9 @@
         </ul>
       </div>
     </section>
-
-    <a href="#" id="loadData">Show contents</a>
-    <div id="content"></div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
       $(document).ready(function () {
-        $("#loadData").click(function () {});
         searchLastFM();
       });
       function searchLastFM() {
@@ -104,24 +115,24 @@
             //header section with artist brand info
             $("header").html(`${header} ${tagOutPut}`);
           })
-        ).then(function () {
-          $.ajax({
-            url: "http://ws.audioscrobbler.com/2.0/",
-            type: "GET",
-            data: {
-              method: "artist.getTopTracks",
-              artist: "Jay-Z",
-              api_key: "71499159fe5e641e3445d4cb412a7d5a",
-              format: "json",
-              limit: 25,
-              autocorrect: 1,
-            },
-          }).done(function (music) {
-            let items = music.toptracks;
-            let featuredMusic = "";
-            let featuredVideos = "";
-            let featuredMerchandise = "";
-            let hero = `
+        )
+          .then(function () {
+            $.ajax({
+              url: "http://ws.audioscrobbler.com/2.0/",
+              type: "GET",
+              data: {
+                method: "artist.getTopTracks",
+                artist: "Jay-Z",
+                api_key: "71499159fe5e641e3445d4cb412a7d5a",
+                format: "json",
+                limit: 25,
+                autocorrect: 1,
+              },
+            }).done(function (music) {
+              let items = music.toptracks;
+              let featuredMusic = "";
+              let featuredMerchandise = "";
+              let hero = `
                 <p>
                     New single available on streaming platforms </p>
                     <h3><a href="#" target="blank">${items.track[1].name}</a></h3>
@@ -131,8 +142,8 @@
                     </div>
 
               `;
-            $.each(items["track"], function (index, value) {
-              featuredMusic += `
+              $.each(items["track"], function (index, value) {
+                featuredMusic += `
                 <ul class="featured-music">
                     <li>
                         <a href="${value.url}" data-song="song1" target="blank">
@@ -144,19 +155,47 @@
                     </li>
                 </ul>
               `;
-            });
-            //Banner section for new release
-            $("#hero").html(hero);
-            //music section html
-            $("#music").html(
-              `<h3 class="heading">More music by ${items.track[0].artist.name}</h3> 
+              });
+              //Banner section for new release
+              $("#hero").html(hero);
+              //music section html
+              $("#music").html(
+                `<h3 class="heading">More music by ${items.track[0].artist.name}</h3> 
                  ${featuredMusic}`
-            );
-            console.log(items); //tracks for infinite scroll or pagination
-            //$("#shop").html(featuredMerchandise);
-            //$("#videos").html(featuredVideos);
+              );
+              console.log(items); //tracks for infinite scroll or pagination
+              //$("#shop").html(featuredMerchandise);
+            });
+          })
+          .then(function () {
+            $.ajax({
+              url: "https://www.googleapis.com/youtube/v3/search?",
+              dataType: "json",
+              type: "GET",
+              data: {
+                key: "AIzaSyAiFU1MmoeGYxFOPNnEi56mqNNOlr3zFgo",
+                q: "Jay-Z",
+                part: "snippet",
+                maxResults: 15,
+                pageToken: "CBkQAA",
+              },
+            }).done(function (data) {
+              console.log(data);
+              let nextPage = data.nextPageToken;
+              let prevPage = data.prevPageToken;
+
+              let featuredVideos = "";
+              $.each(data["items"], function (index, value) {
+                featuredVideos += `
+                <div class="video">
+                    <h3>${value.snippet.title} </h3>
+                    <div class="url">${value.id.videoId}</div>
+                    <div><img class="thumbnail" src="${value.snippet.thumbnails.medium.url}"</div> 
+                </div> `;
+              }); //videos from Jay-Z
+              $("#videos").html(featuredVideos);
+            });
           });
-        });
       }
     </script>
   </body>
