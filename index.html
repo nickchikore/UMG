@@ -69,134 +69,20 @@
         </ul>
       </div>
     </section>
+    <div class="overlayBg"></div>
+    <div class="popup">
+      <a href="" class="close">x</a>
+      <iframe
+        width="560"
+        height="315"
+        src="https://www.youtube.com/embed/vk6014HuxcE"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script>
-      $(document).ready(function () {
-        searchLastFM();
-      });
-      function searchLastFM() {
-        $.when(
-          $.ajax({
-            url: "http://ws.audioscrobbler.com/2.0/",
-            type: "GET",
-            data: {
-              method: "artist.getInfo",
-              artist: "Jay-Z",
-              api_key: "71499159fe5e641e3445d4cb412a7d5a",
-              format: "json",
-            },
-          }).done(function (artist) {
-            let header = "";
-            let tags = artist.artist.tags.tag;
-            let tagOutPut = "";
-            if (tags.length > 1) {
-              tags.splice(-1);
-              for (i = 0; i < tags.length; i++) {
-                tagOutPut += `
-              <span class="tag">${tags[i].name}</span>
-              `;
-              }
-            } //get tags from bio to show genres for searching and filtering
-            header += `
-              <h1>${artist.artist.name}</h1>
-              `;
-            //header section with artist brand info
-            $("header").html(`${header} ${tagOutPut}`);
-          })
-        )
-          .then(function () {
-            $.ajax({
-              url: "http://ws.audioscrobbler.com/2.0/",
-              type: "GET",
-              data: {
-                method: "artist.getTopTracks",
-                artist: "Jay-Z",
-                api_key: "71499159fe5e641e3445d4cb412a7d5a",
-                format: "json",
-                limit: 25,
-                autocorrect: 1,
-              },
-            }).done(function (music) {
-              let items = music.toptracks;
-              let featuredMusic = "";
-              let featuredMerchandise = "";
-              let hero = `
-              <div class="banner-info">
-                <h3>
-                    New single available on streaming platforms </h3>
-                    <p><a class="large-text" href="#" target="blank" title="${items.track[1].name}">${items.track[1].name}</a></p></div>
-                    <div class="stats">
-                        <p><span> ${items.track[1].playcount}</span> streams since release</p>
-                        <p><span> ${items.track[1].listeners}</span> listeners</p>
-                    </div>
-
-              `;
-              $.each(items["track"], function (index, value) {
-                featuredMusic += `
-                    <li>
-                        <a href="${value.url}" data-song="song1" target="blank">
-                        <img src="${value.image[0]["#text"]}" alt="${value.name}">
-                        ${value.name}
-                        </a>
-
-                        <span>${value.playcount}</span>
-                    </li>
-              `;
-              });
-              //Banner section for new release
-              $("#hero").html(hero);
-              //music section html
-              $("#music").html(
-                `<h3 class="heading">More music by ${items.track[0].artist.name}</h3> 
-                <div class="player">
-                <audio controls>
-                    <source src="" type="audio/ogg" />
-                    <source src="" type="audio/mpeg" /> 
-                    Your browser does not support the audio element.
-                </audio>
-                <span>Now playing: </span>
-                </div>
-                <ul class="featured-music">
-                 ${featuredMusic}
-                 </ul>
-                 `
-              );
-              console.log(items); //tracks for infinite scroll or pagination
-              //$("#shop").html(featuredMerchandise);
-            });
-          })
-          .then(function () {
-            $.ajax({
-              url: "https://www.googleapis.com/youtube/v3/search?",
-              dataType: "json",
-              type: "GET",
-              data: {
-                key: "AIzaSyCfQlRjUUcb1ApGpa5KJFGOj_YvIB0qalc",
-                q: "Jay-Z",
-                part: "snippet",
-                maxResults: 15,
-              },
-            }).done(function (data) {
-              console.log(data);
-              // let nextPage = data.nextPageToken;
-              // let prevPage = data.prevPageToken;
-
-              let featuredVideos = "";
-              $.each(data["items"], function (index, value) {
-                featuredVideos += `
-                <div class="video">
-                  <a href="">
-                    <img class="thumbnail" src="${value.snippet.thumbnails.medium.url}"/>
-                    <div>${value.snippet.title} </div>
-                    </a>
-                </div> `;
-              }); //videos from Jay-Z
-              $("#videos").html(
-                `<h3>Popular videos</h3><div class="videos">${featuredVideos}</div>`
-              );
-            });
-          });
-      }
-    </script>
+    <script src="./scripts.js"></script>
   </body>
 </html>

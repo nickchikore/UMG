@@ -273,4 +273,22 @@ body {
       flex-direction: row;
     }
   }
+  .popup {
+    background: $off-green;
+    position: absolute;
+    border: solid 2px white;
+    width: auto;
+    min-height: auto;
+    z-index: 5000;
+  }
+  .overlayBg {
+    background-color: #333;
+    opacity: 0.5;
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+  }
 }

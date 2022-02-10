@@ -269,4 +269,22 @@ body .featured-videos .videos .video + .video {
     display: flex;
     flex-direction: row;
   }
+}
+body .popup {
+  background: #545c59;
+  position: absolute;
+  border: solid 2px white;
+  width: auto;
+  min-height: auto;
+  z-index: 5000;
+}
+body .overlayBg {
+  background-color: #333;
+  opacity: 0.5;
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100%;
 }/*# sourceMappingURL=styles.css.map */
