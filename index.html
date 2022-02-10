@@ -4,13 +4,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
     <title>Document</title>
   </head>
   <body>
     <header></header>
     <!--A promotional banner advertising a new single -->
     <section class="container banner-promo" id="hero"></section>
-    <section class="container">
+    <section class="container products">
       <!-- A “Music” section (not required to have working audio playback). Can display anything music-related using either of the following APIs (feel free to query any UMG artist) -->
       <!-- Include pagination or infinite scroll in one of the sections. -->
       <!-- Please include one visualization/graph using any of the API’s previously mentioned -->
@@ -18,24 +19,28 @@
       <div class="container featured-merchandise" id="shop">
         <!-- A “Merch” section showcasing 1-4 products (can use dummy/static data) -->
         <!-- Include an option to filter the product for one of the sections (this option should use a React hook to conditionally call one of the suggested API endpoints). -->
-        <h2>Buy Jay-Z offical merchandise!</h2>
+        <h3>Buy Jay-Z offical merchandise!</h3>
         <ul class="merchandise">
           <li>
-            <a href="#" data-shop-item="shop-item1">
-              <img src="/img/white-t.jpeg" alt="" />
-              Jay-Z classic white t-shirt</a
-            >
-            <p>£89.00</p>
-            <button type="button" class="btn">Add to basket</button>
+            <img src="/img/white-t.jpeg" alt="" />
+            <div>
+              <a href="#" data-shop-item="shop-item1">
+                Jay-Z classic white t-shirt</a
+              >
+              <p>£89.00</p>
+              <button type="button" class="btn">Add to basket</button>
+            </div>
           </li>
           <li>
-            <a href="#" data-shop-item="shop-item2">
-              <img src="/img/black-t.jpeg" alt="" />
-              Jay-Z retro black t-shirt</a
-            >
-            <p><span class="" reduced>£125</span>£64.00</p>
+            <img src="/img/black-t.jpeg" alt="" />
+            <div>
+              <a href="#" data-shop-item="shop-item2">
+                Jay-Z retro black t-shirt</a
+              >
+              <p><span class="reduced">£125</span>£64.00</p>
 
-            <button type="button" class="btn">Add to basket</button>
+              <button type="button" class="btn">Add to basket</button>
+            </div>
           </li>
         </ul>
         {{pagination here}}
@@ -116,18 +121,18 @@
               let featuredMusic = "";
               let featuredMerchandise = "";
               let hero = `
-                <p>
-                    New single available on streaming platforms </p>
-                    <h3><a href="#" target="blank">${items.track[1].name}</a></h3>
+              <div class="banner-info">
+                <h3>
+                    New single available on streaming platforms </h3>
+                    <p><a class="large-text" href="#" target="blank" title="${items.track[1].name}">${items.track[1].name}</a></p></div>
                     <div class="stats">
-                        <span> ${items.track[1].playcount} streams since release</span>
-                        <span> ${items.track[1].listeners} listeners</span>
+                        <p><span> ${items.track[1].playcount}</span> streams since release</p>
+                        <p><span> ${items.track[1].listeners}</span> listeners</p>
                     </div>
 
               `;
               $.each(items["track"], function (index, value) {
                 featuredMusic += `
-                <ul class="featured-music">
                     <li>
                         <a href="${value.url}" data-song="song1" target="blank">
                         <img src="${value.image[0]["#text"]}" alt="${value.name}">
@@ -136,7 +141,6 @@
 
                         <span>${value.playcount}</span>
                     </li>
-                </ul>
               `;
               });
               //Banner section for new release
@@ -144,12 +148,18 @@
               //music section html
               $("#music").html(
                 `<h3 class="heading">More music by ${items.track[0].artist.name}</h3> 
+                <div class="player">
                 <audio controls>
                     <source src="" type="audio/ogg" />
                     <source src="" type="audio/mpeg" /> 
                     Your browser does not support the audio element.
                 </audio>
-                 ${featuredMusic}`
+                <span>Now playing: </span>
+                </div>
+                <ul class="featured-music">
+                 ${featuredMusic}
+                 </ul>
+                 `
               );
               console.log(items); //tracks for infinite scroll or pagination
               //$("#shop").html(featuredMerchandise);
@@ -161,27 +171,29 @@
               dataType: "json",
               type: "GET",
               data: {
-                key: "AIzaSyCSpcBdTY7inkvTWLXJeAnP_7PM4-OPNYM",
+                key: "AIzaSyCfQlRjUUcb1ApGpa5KJFGOj_YvIB0qalc",
                 q: "Jay-Z",
                 part: "snippet",
                 maxResults: 15,
-                pageToken: "CBkQAA",
               },
             }).done(function (data) {
               console.log(data);
-              let nextPage = data.nextPageToken;
-              let prevPage = data.prevPageToken;
+              // let nextPage = data.nextPageToken;
+              // let prevPage = data.prevPageToken;
 
               let featuredVideos = "";
               $.each(data["items"], function (index, value) {
                 featuredVideos += `
                 <div class="video">
-                    <h3>${value.snippet.title} </h3>
-                    <div class="url">${value.id.videoId}</div>
-                    <div><img class="thumbnail" src="${value.snippet.thumbnails.medium.url}"</div> 
+                  <a href="">
+                    <img class="thumbnail" src="${value.snippet.thumbnails.medium.url}"/>
+                    <div>${value.snippet.title} </div>
+                    </a>
                 </div> `;
               }); //videos from Jay-Z
-              $("#videos").html(featuredVideos);
+              $("#videos").html(
+                `<h3>Popular videos</h3><div class="videos">${featuredVideos}</div>`
+              );
             });
           });
       }
